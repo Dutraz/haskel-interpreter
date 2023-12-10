@@ -19,6 +19,11 @@ import Lexer
     "&&"        { TokenAnd }
     "||"        { TokenOr }
     "=="        { TokenDbEq }
+    "!="        { TokenNotEq }
+    '<'         { TokenLt }
+    "<="        { TokenLte }
+    '>'         { TokenGt }
+    ">="        { TokenGte }
     true        { TokenTrue }
     false       { TokenFalse }
     if          { TokenIf }
@@ -46,6 +51,11 @@ Exp         : num                         { Num $1 }
             | Exp "&&" Exp                { And $1 $3 }
             | Exp "||" Exp                { Or $1 $3 }
             | Exp "==" Exp                { Equal $1 $3 }
+            | Exp "!=" Exp                { NotEqual $1 $3 }
+            | Exp '<' Exp                 { Less $1 $3 }
+            | Exp "<=" Exp                { LessEqual $1 $3 }
+            | Exp '>' Exp                 { Greater $1 $3 }
+            | Exp ">=" Exp                { GreaterEqual $1 $3 }
             | if Exp then Exp else Exp    { If $2 $4 $6 }
             | var                         { Var $1 }
             | '\\' var ':' Type "->" Exp  { Lam $2 $4 $6 }

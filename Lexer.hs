@@ -12,6 +12,11 @@ data Expr
   | And Expr Expr
   | Or Expr Expr
   | Equal Expr Expr
+  | NotEqual Expr Expr
+  | Less Expr Expr
+  | LessEqual Expr Expr
+  | Greater Expr Expr
+  | GreaterEqual Expr Expr
   | If Expr Expr Expr
   | Var String
   | Lam String Ty Expr
@@ -36,6 +41,11 @@ data Token
   | TokenAnd
   | TokenOr
   | TokenDbEq
+  | TokenNotEq
+  | TokenGt
+  | TokenLt
+  | TokenGte
+  | TokenLte
   | TokenIf
   | TokenThen
   | TokenElse
@@ -53,7 +63,7 @@ data Token
   deriving (Show, Eq)
 
 isSymb :: Char -> Bool
-isSymb c = c `elem` "+-*&|\\->()=:"
+isSymb c = c `elem` "+-*&|\\-><()=:!"
 
 lexer :: String -> [Token]
 lexer [] = []
@@ -78,6 +88,10 @@ lexSymbol cs = case span isSymb cs of
   ("&&", rest) -> TokenAnd : lexer rest
   ("||", rest) -> TokenOr : lexer rest
   ("==", rest) -> TokenDbEq : lexer rest
+  ("!=", rest) -> TokenNotEq : lexer rest
+  (">", rest) -> TokenGt : lexer rest
+  ("<", rest) -> TokenLt : lexer rest
+  (">=", rest) -> TokenGte : lexer rest
   ("\\", rest) -> TokenLam : lexer rest
   ("->", rest) -> TokenArrow : lexer rest
   ("=", rest) -> TokenEq : lexer rest

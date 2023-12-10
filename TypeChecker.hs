@@ -33,6 +33,26 @@ typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
 typeof ctx (Equal e1 e2) = case (typeof ctx e1, typeof ctx e2) of
   (Just TNum, Just TNum) -> Just TNum
   _ -> Nothing
+-- NOT EQUAL
+typeof ctx (NotEqual e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
+-- LESS THAN
+typeof ctx (Less e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
+-- LESS THAN OR EQUAL
+typeof ctx (LessEqual e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
+-- GREATER THAN
+typeof ctx (Greater e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
+-- GREATER THAN OR EQUAL
+typeof ctx (GreaterEqual e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
 -- IF
 typeof ctx (If e e1 e2) = case typeof ctx e of
   Just TBool -> case (typeof ctx e1, typeof ctx e2) of
