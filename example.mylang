@@ -1,3 +1,1 @@
-let soma = (\y : Num -> 1+ y) in
-let main = soma 2 in
-main
+1 == 1

@@ -11,6 +11,7 @@ data Expr
   | Mul Expr Expr
   | And Expr Expr
   | Or Expr Expr
+  | Equal Expr Expr
   | If Expr Expr Expr
   | Var String
   | Lam String Ty Expr
@@ -34,6 +35,7 @@ data Token
   | TokenMul
   | TokenAnd
   | TokenOr
+  | TokenDbEq
   | TokenIf
   | TokenThen
   | TokenElse
@@ -75,6 +77,7 @@ lexSymbol cs = case span isSymb cs of
   ("*", rest) -> TokenMul : lexer rest
   ("&&", rest) -> TokenAnd : lexer rest
   ("||", rest) -> TokenOr : lexer rest
+  ("==", rest) -> TokenDbEq : lexer rest
   ("\\", rest) -> TokenLam : lexer rest
   ("->", rest) -> TokenArrow : lexer rest
   ("=", rest) -> TokenEq : lexer rest
