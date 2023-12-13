@@ -73,6 +73,16 @@ typeof ctx (App e1 e2) = case (typeof ctx e1, typeof ctx e2) of
 typeof ctx (Let v e1 e2) = case typeof ctx e1 of
   Just t1 -> typeof ((v, t1) : ctx) e2
   _ -> Nothing
+-- CASE
+typeof ctx (Case e (Cases cs)) =
+  let etype = typeof ctx e
+   in let keyTypes = etype : map (\(SCase k v) -> typeof ctx k) cs
+       in let valueTypes = map (\(SCase k v) -> typeof ctx v) cs
+           in if allEqual keyTypes && allEqual valueTypes then head valueTypes else Nothing
+
+allEqual :: [Maybe Ty] -> Bool
+allEqual [] = True
+allEqual (x : xs) = all (== x) xs
 
 typecheck :: Expr -> Expr
 typecheck e = case typeof [] e of

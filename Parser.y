@@ -40,6 +40,9 @@ import Lexer
     ':'         { TokenColon }
     Num         { TokenNumber }
     Bool        { TokenBoolean }
+    case        { TokenCase }
+    of          { TokenOf }
+    ';'         { TokenSemicolon }
 %%
 
 Exp         : num                         { Num $1 }
@@ -62,10 +65,16 @@ Exp         : num                         { Num $1 }
             | Exp Exp                     { App $1 $2 }
             | '(' Exp ')'                 { Paren $2 }
             | let var '=' Exp in Exp      { Let $2 $4 $6 }
+            | case Exp of '(' Cases ')'   { Case $2 (Cases $5) }
 
 Type        : Bool                        { TBool }
             | Num                         { TNum }
             | '(' Type "->" Type ')'      { TFun $2 $4 }
+
+SCase       : Exp "->" Exp ';'            { SCase $1 $3 }
+
+Cases       : SCase                       { [$1] }
+            | Cases SCase                 { $2 : $1 }
 
 {
 

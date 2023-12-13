@@ -1,1 +1,6 @@
-1 != 2
+let willian = 1 in 
+  let giovani = 2 in 
+    case giovani of ( 
+      1 -> true; 
+      2 -> false; 
+    )

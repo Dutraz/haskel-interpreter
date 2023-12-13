@@ -23,6 +23,7 @@ data Expr
   | App Expr Expr
   | Paren Expr
   | Let String Expr Expr
+  | Case Expr Cases
   deriving (Show)
 
 data Ty
@@ -30,6 +31,14 @@ data Ty
   | TNum
   | TFun Ty Ty
   deriving (Show, Eq)
+
+data SCase
+  = SCase Expr Expr
+  deriving (Show)
+
+data Cases
+  = Cases [SCase]
+  deriving (Show)
 
 data Token
   = TokenTrue
@@ -60,6 +69,9 @@ data Token
   | TokenColon
   | TokenBoolean
   | TokenNumber
+  | TokenCase
+  | TokenOf
+  | TokenSemicolon
   deriving (Show, Eq)
 
 isSymb :: Char -> Bool
@@ -69,6 +81,7 @@ lexer :: String -> [Token]
 lexer [] = []
 lexer ('(' : cs) = TokenLParen : lexer cs
 lexer (')' : cs) = TokenRParen : lexer cs
+lexer (';' : cs) = TokenSemicolon : lexer cs
 lexer (c : cs)
   | isSpace c = lexer cs
   | isDigit c = lexNum (c : cs)
@@ -109,4 +122,6 @@ lexKW cs = case span isAlpha cs of
   ("in", rest) -> TokenIn : lexer rest
   ("Num", rest) -> TokenNumber : lexer rest
   ("Bool", rest) -> TokenBoolean : lexer rest
+  ("case", rest) -> TokenCase : lexer rest
+  ("of", rest) -> TokenOf : lexer rest
   (var, rest) -> TokenVar var : lexer rest

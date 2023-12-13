@@ -11,6 +11,11 @@ isValue (Num _) = True
 isValue (Lam _ _ _) = True
 isValue _ = False
 
+getValue :: Expr -> Int
+getValue (Num n) = n
+getValue BTrue = 1
+getValue BFalse = 0
+
 subst :: String -> Expr -> Expr -> Expr
 subst x n (Var v) = if x == v then n else Var v
 subst x n (Lam v t b) = Lam v t (subst x n b)
@@ -29,7 +34,11 @@ subst x n (Greater e1 e2) = Greater (subst x n e1) (subst x n e2)
 subst x n (GreaterEqual e1 e2) = GreaterEqual (subst x n e1) (subst x n e2)
 subst x n (If e e1 e2) = If (subst x n e) (subst x n e1) (subst x n e2)
 subst x n (Paren e) = Paren (subst x n e)
+subst x n (Case e (Cases cs)) = Case (subst x n e) (Cases (map (substSCase x n) cs))
 subst x n e = e
+
+substSCase :: String -> Expr -> SCase -> SCase
+substSCase x n (SCase k v) = SCase (subst x n k) (subst x n v)
 
 step :: Expr -> Expr
 -- ADD
@@ -91,6 +100,11 @@ step (App e1 e2) = App (step e1) e2
 step (Let v e1 e2)
   | isValue e1 = subst v e1 e2
   | otherwise = Let v (step e1) e2
+-- CASE
+step (Case e (Cases [])) = error "No matching case"
+step (Case e (Cases (SCase k v : cs)))
+  | isValue e = if getValue k == getValue e then v else step (Case e (Cases cs))
+  | otherwise = Case (step e) (Cases (SCase k v : cs))
 -- OTHER
 step e = e
 
