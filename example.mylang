@@ -1,6 +1,4 @@
-let willian = 1 in 
-  let giovani = 2 in 
-    case giovani of ( 
-      1 -> true; 
-      2 -> false; 
-    )
+case true != true of ( 
+  true -> 100; 
+  false -> 0; 
+)

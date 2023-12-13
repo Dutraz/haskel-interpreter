@@ -31,11 +31,11 @@ typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
   _ -> Nothing
 -- EQUAL
 typeof ctx (Equal e1 e2) = case (typeof ctx e1, typeof ctx e2) of
-  (Just TNum, Just TNum) -> Just TNum
+  (Just t1, Just t2) -> if t1 == t2 then Just t1 else Nothing
   _ -> Nothing
 -- NOT EQUAL
 typeof ctx (NotEqual e1 e2) = case (typeof ctx e1, typeof ctx e2) of
-  (Just TNum, Just TNum) -> Just TNum
+  (Just t1, Just t2) -> if t1 == t2 then Just t1 else Nothing
   _ -> Nothing
 -- LESS THAN
 typeof ctx (Less e1 e2) = case (typeof ctx e1, typeof ctx e2) of
@@ -58,6 +58,7 @@ typeof ctx (If e e1 e2) = case typeof ctx e of
   Just TBool -> case (typeof ctx e1, typeof ctx e2) of
     (Just t1, Just t2) -> if t1 == t2 then Just t1 else Nothing
     _ -> Nothing
+  _ -> Nothing
 -- PARENTHESES
 typeof ctx (Paren e) = typeof ctx e
 -- LAMBDA

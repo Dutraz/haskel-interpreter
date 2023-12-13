@@ -62,13 +62,15 @@ step (Or BTrue _) = BTrue
 step (Or BFalse e) = e
 step (Or e1 e2) = Or (step e1) e2
 -- EQUAL
-step (Equal (Num n1) (Num n2)) = if n1 == n2 then BTrue else BFalse
-step (Equal (Num n) e) = Equal (Num n) (step e)
-step (Equal e1 e2) = Equal (step e1) e2
+step (Equal e1 e2) = case (isValue e1, isValue e2) of
+  (True, True) -> if getValue e1 == getValue e2 then BTrue else BFalse
+  (False, _) -> Equal (step e1) e2
+  (True, False) -> Equal e1 (step e2)
 -- NOT EQUAL
-step (NotEqual (Num n1) (Num n2)) = if n1 /= n2 then BTrue else BFalse
-step (NotEqual (Num n) e) = NotEqual (Num n) (step e)
-step (NotEqual e1 e2) = NotEqual (step e1) e2
+step (NotEqual e1 e2) = case (isValue e1, isValue e2) of
+  (True, True) -> if getValue e1 /= getValue e2 then BTrue else BFalse
+  (False, _) -> NotEqual (step e1) e2
+  (True, False) -> NotEqual e1 (step e2)
 -- GREATER THAN
 step (Greater (Num n1) (Num n2)) = if n1 > n2 then BTrue else BFalse
 step (Greater (Num n) e) = Greater (Num n) (step e)

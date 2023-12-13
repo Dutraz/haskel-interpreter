@@ -1,0 +1,10 @@
+let valor = 10 * 30 in
+  let faixa = 3 in
+    let ultimafaixa = 3 in
+      let taxaum = 200 in
+        let taxadois = 300 in
+          case faixa of (
+            1 -> valor + taxaum; 
+            2 -> valor + taxadois; 
+            ultimafaixa -> valor;
+          )

@@ -1,0 +1,4 @@
+case true == false of ( 
+  false -> 10; 
+  true -> 20; 
+)

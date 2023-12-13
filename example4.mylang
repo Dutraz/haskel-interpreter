@@ -1,0 +1,4 @@
+case 1 of ( 
+  false -> 10; 
+  true -> 20; 
+)
